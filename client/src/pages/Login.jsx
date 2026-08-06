@@ -127,24 +127,33 @@ export default function Login() {
           <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600, display: 'block', marginBottom: '0.75rem', textAlign: 'center' }}>
             QUICK DEMO LOGINS (जलद प्रवेश):
           </span>
-          <div style={{ display: 'flex', gap: '0.75rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.5rem' }}>
             <button
               type="button"
-              onClick={() => fillCredentials('admin', 'GHUBARE44')}
+              onClick={() => fillCredentials('admin', 'admin123')}
               className="btn btn-secondary btn-sm"
-              style={{ flex: 1, fontSize: '0.75rem' }}
+              style={{ fontSize: '0.75rem', padding: '0.5rem 0.2rem' }}
             >
               <ShieldCheck size={14} color="#f43f5e" />
               Admin
             </button>
             <button
               type="button"
-              onClick={() => fillCredentials('manager', 'FINANCE123')}
+              onClick={() => fillCredentials('distributor', 'dist123')}
               className="btn btn-secondary btn-sm"
-              style={{ flex: 1, fontSize: '0.75rem' }}
+              style={{ fontSize: '0.75rem', padding: '0.5rem 0.2rem' }}
+            >
+              <UserCheck size={14} color="#f59e0b" />
+              Distributor
+            </button>
+            <button
+              type="button"
+              onClick={() => fillCredentials('manager', 'manager123')}
+              className="btn btn-secondary btn-sm"
+              style={{ fontSize: '0.75rem', padding: '0.5rem 0.2rem' }}
             >
               <UserCheck size={14} color="var(--accent-cyan)" />
-              Finance Manager
+              Manager
             </button>
           </div>
         </div>
