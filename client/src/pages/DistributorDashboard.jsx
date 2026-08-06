@@ -15,6 +15,7 @@ export default function DistributorDashboard({ onSwitchModule }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Modal States
   const [showPartyModal, setShowPartyModal] = useState(false);
   const [editingParty, setEditingParty] = useState(null);
   const [partyForm, setPartyForm] = useState({ name: '', type: 'customer', phone: '', gst_number: '', address: '', opening_balance: '0' });
@@ -68,6 +69,7 @@ export default function DistributorDashboard({ onSwitchModule }) {
     return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(val || 0);
   };
 
+  // PARTY CRUD
   const handleSaveParty = async (e) => {
     e.preventDefault();
     try {
@@ -95,6 +97,7 @@ export default function DistributorDashboard({ onSwitchModule }) {
     }
   };
 
+  // ITEM CRUD
   const handleSaveItem = async (e) => {
     e.preventDefault();
     try {
@@ -122,6 +125,7 @@ export default function DistributorDashboard({ onSwitchModule }) {
     }
   };
 
+  // SALE INVOICE CRUD
   const handleCreateSale = async (e) => {
     e.preventDefault();
     try {
@@ -146,6 +150,7 @@ export default function DistributorDashboard({ onSwitchModule }) {
     }
   };
 
+  // PURCHASE INVOICE CRUD
   const handleCreatePurchase = async (e) => {
     e.preventDefault();
     try {
@@ -170,6 +175,7 @@ export default function DistributorDashboard({ onSwitchModule }) {
     }
   };
 
+  // PAYMENT CRUD
   const handleRecordPayment = async (e) => {
     e.preventDefault();
     try {
@@ -192,6 +198,7 @@ export default function DistributorDashboard({ onSwitchModule }) {
     }
   };
 
+  // EXCEL EXPORT
   const handleExportDistributorExcel = async () => {
     try {
       const token = localStorage.getItem('boat_finance_token');
@@ -225,6 +232,7 @@ export default function DistributorDashboard({ onSwitchModule }) {
   return (
     <div style={{ padding: '1.25rem', maxWidth: '1280px', margin: '0 auto' }}>
       
+      {/* Top Header Module Switcher */}
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem', background: 'var(--bg-surface)', padding: '1rem 1.25rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
         <div>
           <div style={{ fontSize: '0.85rem', textTransform: 'uppercase', tracking: '0.05em', color: 'var(--text-muted)', fontWeight: 600 }}>
@@ -266,9 +274,16 @@ export default function DistributorDashboard({ onSwitchModule }) {
           >
             <DollarSign size={18} /> Record Payment
           </button>
+          <button
+            onClick={() => { setEditingParty(null); setPartyForm({ name: '', type: 'customer', phone: '', gst_number: '', address: '', opening_balance: '0' }); setShowPartyModal(true); }}
+            style={{ padding: '0.6rem 1rem', borderRadius: '8px', border: 'none', background: '#f59e0b', color: '#fff', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+          >
+            <Users size={18} /> + Add Party
+          </button>
         </div>
       </div>
 
+      {/* Tabs Navigation */}
       <div style={{ display: 'flex', overflowX: 'auto', gap: '0.5rem', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
         {[
           { id: 'overview', label: '📊 Dashboard Overview' },
@@ -298,6 +313,7 @@ export default function DistributorDashboard({ onSwitchModule }) {
         ))}
       </div>
 
+      {/* TAB 1: OVERVIEW */}
       {activeTab === 'overview' && data && (
         <div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem', marginBottom: '1.5rem' }}>
@@ -358,6 +374,7 @@ export default function DistributorDashboard({ onSwitchModule }) {
         </div>
       )}
 
+      {/* TAB 2: PARTIES */}
       {activeTab === 'parties' && (
         <div style={{ background: 'var(--bg-surface)', borderRadius: '14px', padding: '1.25rem', border: '1px solid rgba(255,255,255,0.08)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
@@ -400,6 +417,7 @@ export default function DistributorDashboard({ onSwitchModule }) {
         </div>
       )}
 
+      {/* TAB 3: ITEMS */}
       {activeTab === 'items' && (
         <div style={{ background: 'var(--bg-surface)', borderRadius: '14px', padding: '1.25rem', border: '1px solid rgba(255,255,255,0.08)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
@@ -444,6 +462,7 @@ export default function DistributorDashboard({ onSwitchModule }) {
         </div>
       )}
 
+      {/* TAB 4: SALES INVOICES */}
       {activeTab === 'sales' && (
         <div style={{ background: 'var(--bg-surface)', borderRadius: '14px', padding: '1.25rem', border: '1px solid rgba(255,255,255,0.08)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
@@ -493,6 +512,7 @@ export default function DistributorDashboard({ onSwitchModule }) {
         </div>
       )}
 
+      {/* TAB 5: PURCHASES */}
       {activeTab === 'purchases' && (
         <div style={{ background: 'var(--bg-surface)', borderRadius: '14px', padding: '1.25rem', border: '1px solid rgba(255,255,255,0.08)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
@@ -542,6 +562,7 @@ export default function DistributorDashboard({ onSwitchModule }) {
         </div>
       )}
 
+      {/* TAB 6: PAYMENT LEDGER */}
       {activeTab === 'payments' && (
         <div style={{ background: 'var(--bg-surface)', borderRadius: '14px', padding: '1.25rem', border: '1px solid rgba(255,255,255,0.08)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
@@ -589,6 +610,7 @@ export default function DistributorDashboard({ onSwitchModule }) {
         </div>
       )}
 
+      {/* MODAL: ADD/EDIT PARTY */}
       {showPartyModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '1rem' }}>
           <div style={{ background: 'var(--bg-surface)', padding: '1.5rem', borderRadius: '12px', width: '100%', maxWidth: '480px', border: '1px solid rgba(255,255,255,0.1)' }}>
@@ -610,6 +632,18 @@ export default function DistributorDashboard({ onSwitchModule }) {
                 <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.3rem' }}>Phone Number</label>
                 <input type="text" value={partyForm.phone || ''} onChange={e => setPartyForm({ ...partyForm, phone: e.target.value })} style={{ width: '100%', padding: '0.6rem', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', background: 'var(--bg-primary)', color: 'var(--text-main)' }} />
               </div>
+              <div style={{ marginBottom: '0.8rem' }}>
+                <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.3rem' }}>GST Number</label>
+                <input type="text" value={partyForm.gst_number || ''} onChange={e => setPartyForm({ ...partyForm, gst_number: e.target.value })} style={{ width: '100%', padding: '0.6rem', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', background: 'var(--bg-primary)', color: 'var(--text-main)' }} />
+              </div>
+              <div style={{ marginBottom: '0.8rem' }}>
+                <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.3rem' }}>Address</label>
+                <input type="text" value={partyForm.address || ''} onChange={e => setPartyForm({ ...partyForm, address: e.target.value })} style={{ width: '100%', padding: '0.6rem', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', background: 'var(--bg-primary)', color: 'var(--text-main)' }} />
+              </div>
+              <div style={{ marginBottom: '0.8rem' }}>
+                <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.3rem' }}>Opening Balance (₹)</label>
+                <input type="number" step="any" value={partyForm.opening_balance || '0'} onChange={e => setPartyForm({ ...partyForm, opening_balance: e.target.value })} style={{ width: '100%', padding: '0.6rem', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.15)', background: 'var(--bg-primary)', color: 'var(--text-main)' }} />
+              </div>
               <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end', marginTop: '1.2rem' }}>
                 <button type="button" onClick={() => setShowPartyModal(false)} style={{ padding: '0.6rem 1rem', borderRadius: '6px', background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: 'var(--text-main)', cursor: 'pointer' }}>Cancel</button>
                 <button type="submit" style={{ padding: '0.6rem 1.2rem', borderRadius: '6px', background: '#10b981', border: 'none', color: '#fff', fontWeight: 700, cursor: 'pointer' }}>Save Party</button>
@@ -619,6 +653,7 @@ export default function DistributorDashboard({ onSwitchModule }) {
         </div>
       )}
 
+      {/* MODAL: ADD/EDIT ITEM */}
       {showItemModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '1rem' }}>
           <div style={{ background: 'var(--bg-surface)', padding: '1.5rem', borderRadius: '12px', width: '100%', maxWidth: '480px', border: '1px solid rgba(255,255,255,0.1)' }}>
@@ -672,6 +707,7 @@ export default function DistributorDashboard({ onSwitchModule }) {
         </div>
       )}
 
+      {/* MODAL: ADD SALE INVOICE */}
       {showSaleModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '1rem' }}>
           <div style={{ background: 'var(--bg-surface)', padding: '1.5rem', borderRadius: '14px', width: '100%', maxWidth: '640px', border: '1px solid rgba(255,255,255,0.1)', maxHeight: '90vh', overflowY: 'auto' }}>
@@ -691,6 +727,7 @@ export default function DistributorDashboard({ onSwitchModule }) {
                 </div>
               </div>
 
+              {/* Line Items */}
               <div style={{ marginBottom: '1rem' }}>
                 <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>Items List</label>
                 {saleLineItems.map((item, idx) => (
@@ -720,6 +757,7 @@ export default function DistributorDashboard({ onSwitchModule }) {
         </div>
       )}
 
+      {/* MODAL: ADD PURCHASE INVOICE */}
       {showPurchaseModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '1rem' }}>
           <div style={{ background: 'var(--bg-surface)', padding: '1.5rem', borderRadius: '14px', width: '100%', maxWidth: '640px', border: '1px solid rgba(255,255,255,0.1)', maxHeight: '90vh', overflowY: 'auto' }}>
@@ -739,6 +777,7 @@ export default function DistributorDashboard({ onSwitchModule }) {
                 </div>
               </div>
 
+              {/* Line Items */}
               <div style={{ marginBottom: '1rem' }}>
                 <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>Purchased Items List</label>
                 {purchaseLineItems.map((item, idx) => (
@@ -768,6 +807,7 @@ export default function DistributorDashboard({ onSwitchModule }) {
         </div>
       )}
 
+      {/* MODAL: RECORD PAYMENT */}
       {showPaymentModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '1rem' }}>
           <div style={{ background: 'var(--bg-surface)', padding: '1.5rem', borderRadius: '14px', width: '100%', maxWidth: '480px', border: '1px solid rgba(255,255,255,0.1)' }}>
