@@ -25,7 +25,7 @@ export default function BoatsPage() {
       setBoats(res);
     } catch (err) {
       console.error(err);
-    } fontally {
+    } finally {
       setLoading(false);
     }
   };
