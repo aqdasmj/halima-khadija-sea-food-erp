@@ -191,21 +191,29 @@ function initDb() {
 
     console.log('Database tables verified / initialized.');
 
-    // Auto-seed default users if table is empty
-    db.get('SELECT COUNT(*) as count FROM users', [], async (err, row) => {
-      if (!err && row && row.count === 0) {
-        console.log('Seeding default users (admin, distributor, manager)...');
+    // Auto-upsert default users (admin, distributor, manager) with guaranteed passwords
+    (async () => {
+      try {
+        console.log('Syncing default user accounts...');
         const bcrypt = require('bcryptjs');
         const adminHash = await bcrypt.hash('admin123', 10);
         const distHash = await bcrypt.hash('dist123', 10);
         const mgrHash = await bcrypt.hash('manager123', 10);
 
-        db.run('INSERT INTO users (username, password_hash, name, role) VALUES (?, ?, ?, ?)', ['admin', adminHash, 'Admin (Ghubare Owner)', 'admin']);
-        db.run('INSERT INTO users (username, password_hash, name, role) VALUES (?, ?, ?, ?)', ['distributor', distHash, 'HK Traders Distributor', 'admin']);
-        db.run('INSERT INTO users (username, password_hash, name, role) VALUES (?, ?, ?, ?)', ['manager', mgrHash, 'Finance Manager', 'finance_manager']);
-        console.log('Default users seeded successfully.');
+        db.run(`INSERT INTO users (username, password_hash, name, role) VALUES (?, ?, ?, ?)
+                ON CONFLICT(username) DO UPDATE SET password_hash = excluded.password_hash`,
+          ['admin', adminHash, 'Admin (Ghubare Owner)', 'admin']);
+        db.run(`INSERT INTO users (username, password_hash, name, role) VALUES (?, ?, ?, ?)
+                ON CONFLICT(username) DO UPDATE SET password_hash = excluded.password_hash`,
+          ['distributor', distHash, 'HK Traders Distributor', 'admin']);
+        db.run(`INSERT INTO users (username, password_hash, name, role) VALUES (?, ?, ?, ?)
+                ON CONFLICT(username) DO UPDATE SET password_hash = excluded.password_hash`,
+          ['manager', mgrHash, 'Finance Manager', 'finance_manager']);
+        console.log('Default user credentials verified & synced.');
+      } catch (e) {
+        console.error('User sync error:', e);
       }
-    });
+    })();
 
     // Auto-seed default boats if table is empty
     db.get('SELECT COUNT(*) as count FROM boats', [], (err, row) => {
