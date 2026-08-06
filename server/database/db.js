@@ -190,6 +190,33 @@ function initDb() {
     `);
 
     console.log('Database tables verified / initialized.');
+
+    // Auto-seed default users if table is empty
+    db.get('SELECT COUNT(*) as count FROM users', [], async (err, row) => {
+      if (!err && row && row.count === 0) {
+        console.log('Seeding default users (admin, distributor, manager)...');
+        const bcrypt = require('bcryptjs');
+        const adminHash = await bcrypt.hash('admin123', 10);
+        const distHash = await bcrypt.hash('dist123', 10);
+        const mgrHash = await bcrypt.hash('manager123', 10);
+
+        db.run('INSERT INTO users (username, password_hash, name, role) VALUES (?, ?, ?, ?)', ['admin', adminHash, 'Admin (Ghubare Owner)', 'admin']);
+        db.run('INSERT INTO users (username, password_hash, name, role) VALUES (?, ?, ?, ?)', ['distributor', distHash, 'HK Traders Distributor', 'admin']);
+        db.run('INSERT INTO users (username, password_hash, name, role) VALUES (?, ?, ?, ?)', ['manager', mgrHash, 'Finance Manager', 'finance_manager']);
+        console.log('Default users seeded successfully.');
+      }
+    });
+
+    // Auto-seed default boats if table is empty
+    db.get('SELECT COUNT(*) as count FROM boats', [], (err, row) => {
+      if (!err && row && row.count === 0) {
+        console.log('Seeding default boats...');
+        db.run('INSERT INTO boats (name, registration_number, owner_name, engine_details, crew_count, status) VALUES (?, ?, ?, ?, ?, ?)', ['Halima Khadija', 'IND-MH-08-MM-1422', 'Ghubare Family (Sakhri Nate)', 'Ashok Leyland 160 HP Marine Engine', 6, 'active']);
+        db.run('INSERT INTO boats (name, registration_number, owner_name, engine_details, crew_count, status) VALUES (?, ?, ?, ?, ?, ?)', ['Al-Raza', 'IND-MH-08-MM-1890', 'Ghubare Family (Sakhri Nate)', 'Cummins 180 HP Marine Engine', 7, 'active']);
+        db.run('INSERT INTO boats (name, registration_number, owner_name, engine_details, crew_count, status) VALUES (?, ?, ?, ?, ?, ?)', ['Bismillah', 'IND-MH-08-MM-2210', 'Ghubare Family (Sakhri Nate)', 'Ruston 120 HP Marine Engine', 5, 'active']);
+        console.log('Default boats seeded successfully.');
+      }
+    });
   });
 }
 
